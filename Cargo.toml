@@ -9,7 +9,7 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/fralonra/bevy-paperdoll"
 keywords = ["bevy", "gamedev", "paperdoll"]
-exclude = [".gitignore", ".github/*", "doc/*", "examples/*"]
+exclude = [".gitignore", ".github/*", "assets/*", "doc/*", "examples/*"]
 
 [dependencies]
 anyhow = "1.0"
