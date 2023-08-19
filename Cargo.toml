@@ -1,0 +1,17 @@
+[package]
+name = "bevy-paperdoll"
+version = "0.1.0"
+authors = ["Fralonra <zoronlivingston@gmail.com>"]
+description = "Bevy plugin for 2D paper doll"
+edition = "2021"
+homepage = "https://github.com/fralonra/bevy-paperdoll"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/fralonra/bevy-paperdoll"
+keywords = ["bevy", "gamedev", "paperdoll"]
+exclude = [".gitignore", ".github/*", "doc/*", "examples/*"]
+
+[dependencies]
+anyhow = "1.0"
+bevy = "0.11"
+paperdoll-tar = "0.1"
