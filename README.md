@@ -3,12 +3,12 @@
 [![Latest version](https://img.shields.io/crates/v/bevy-paperdoll.svg)](https://crates.io/crates/bevy-paperdoll)
 [![Documentation](https://docs.rs/bevy-paperdoll/badge.svg)](https://docs.rs/bevy-paperdoll)
 ![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)
-[![CI](https://github.com/fralonra/bevy-paperdoll/workflows/CI/badge.svg)](https://github.com/fralonra/bevy-paperdoll/actions)
+[![CI](https://github.com/fralonra/bevy-paperdoll/actions/workflows/build.yml/badge.svg)](https://github.com/fralonra/bevy-paperdoll/actions)
 
 [Bevy](https://github.com/bevyengine/bevy) plugin for [paperdoll](https://github.com/fralonra/paperdoll), a 2D pixel-based stationary paper doll model.
 
 <p align="center">
-	  <img alt="screenshot" src="https://raw.githubusercontent.com/fralonra/bevy-paperdoll/master/doc/screenshot.gif" />
+	<img alt="screenshot" src="https://raw.githubusercontent.com/fralonra/bevy-paperdoll/master/doc/screenshot.gif" width="600" />
 </p>
 
 ## Usage
