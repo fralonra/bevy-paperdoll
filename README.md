@@ -4,6 +4,7 @@
 [![Documentation](https://docs.rs/bevy-paperdoll/badge.svg)](https://docs.rs/bevy-paperdoll)
 ![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)
 [![CI](https://github.com/fralonra/bevy-paperdoll/actions/workflows/build.yml/badge.svg)](https://github.com/fralonra/bevy-paperdoll/actions)
+[![Bevy tracking](https://img.shields.io/badge/Bevy%20tracking-released%20version-lightblue)](https://github.com/bevyengine/bevy/blob/main/docs/plugins_guidelines.md#main-branch-tracking)
 
 [Bevy](https://github.com/bevyengine/bevy) plugin for [paperdoll](https://github.com/fralonra/paperdoll), a 2D pixel-based stationary paper doll model.
 
