@@ -20,8 +20,11 @@
 //! Then load a paperdoll file and store the handle. You can use [ppd-editor](https://github.com/fralonra/ppd-editor) to create a valid paperdoll asset.
 //!
 //! ```no_run
+//! # use bevy::prelude::*;
+//! # use bevy_paperdoll::PaperdollAsset;
+//! #
 //! fn load_paperdoll(asset_server: Res<AssetServer>) {
-//!     let handle = asset_server.load("your/paperdoll.ppd");
+//!     let handle: Handle<PaperdollAsset> = asset_server.load("your/paperdoll.ppd");
 //!
 //!     // Store the handle.
 //!     // ...
@@ -31,9 +34,18 @@
 //! Create a paperdoll from the loaded asset and play with it.
 //!
 //! ```no_run
+//! # use bevy::prelude::*;
+//! # use bevy_paperdoll::PaperdollAsset;
+//! #
+//! # #[derive(Default, Resource)]
+//! # struct Resources(Handle<PaperdollAsset>);
+//! #
 //! fn create_paperdoll(
 //!     mut paperdolls: ResMut<Assets<PaperdollAsset>>,
+//! #   resources: Res<Resources>,
 //! ) {
+//! #   let handle = resources.0.clone();
+//! #
 //!     // Access the paperdoll asset using the handle stored previously.
 //!     let paperdoll_asset = paperdolls.get_mut(&handle).unwrap();
 //!
