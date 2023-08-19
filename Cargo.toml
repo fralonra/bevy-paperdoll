@@ -9,9 +9,21 @@ license = "MIT OR Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/fralonra/bevy-paperdoll"
 keywords = ["bevy", "gamedev", "paperdoll"]
+categories = ["game-development"]
 exclude = [".gitignore", ".github/*", "assets/*", "doc/*", "examples/*"]
 
 [dependencies]
 anyhow = "1.0"
-bevy = "0.11"
+bevy = { version = "0.11", default-features = false, features = [
+  "bevy_asset",
+  "bevy_render",
+] }
 paperdoll-tar = "0.1"
+
+[dev-dependencies]
+bevy = { version = "0.11", default-features = false, features = [
+  "bevy_ui",
+  "bevy_winit",
+  "default_font",
+  "x11",
+] }
