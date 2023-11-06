@@ -5,7 +5,7 @@
 Load a paperdoll asset and display it.
 
 ```bash
-cargo run --example display
+cargo run --example display --release
 ```
 
 <p align="center">
@@ -19,7 +19,7 @@ cargo run --example display
 Use buttons to change the paperdoll.
 
 ```bash
-cargo run --example interact
+cargo run --example interact --release
 ```
 
 <p align="center">
