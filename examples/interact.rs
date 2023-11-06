@@ -92,7 +92,7 @@ mod in_game {
         resources: Res<Resources>,
     ) {
         if let Some(paperdoll_asset) = paperdolls.get_mut(&resources.asset) {
-            for ev in ev_paperdoll.iter() {
+            for ev in ev_paperdoll.read() {
                 if let Some(paperdoll_image) = paperdoll_asset.take_texture(resources.paperdoll) {
                     let texture = images.add(paperdoll_image);
 
@@ -163,6 +163,7 @@ mod in_game {
             .spawn(NodeBundle {
                 style: Style {
                     width: Val::Percent(100.0),
+                    height: Val::Percent(100.0),
                     align_items: AlignItems::Center,
                     justify_content: JustifyContent::Center,
                     ..default()
@@ -185,7 +186,7 @@ mod in_game {
                             ImageBundle {
                                 style: Style {
                                     width: Val::Percent(80.0),
-                                    max_width: Val::Px(texture_width),
+                                    max_width: Val::Px(texture_width as f32),
                                     ..default()
                                 },
                                 image: UiImage::new(texture),

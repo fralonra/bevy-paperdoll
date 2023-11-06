@@ -17,7 +17,7 @@ enum SetSlotBy {
 }
 
 /// A structure storing the paperdoll asset and all paperdolls you created.
-#[derive(TypePath, TypeUuid)]
+#[derive(Asset, TypePath, TypeUuid)]
 #[uuid = "f5c9a7ce-3a4a-11ee-be56-0242ac120002"]
 pub struct PaperdollAsset {
     factory: PaperdollFactory,
@@ -49,8 +49,7 @@ impl PaperdollAsset {
                 doll.slots
                     .iter()
                     .map(|slot_id| self.factory.get_slot(*slot_id))
-                    .filter(|slot| slot.is_some())
-                    .map(|slot| slot.unwrap())
+                    .map_while(|slot| slot)
                     .collect::<Vec<&Slot>>()
             })
             .unwrap_or_default();
