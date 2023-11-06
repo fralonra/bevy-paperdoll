@@ -204,7 +204,7 @@ impl PaperdollAsset {
             }
         };
 
-        let mut position_next = position + 1;
+        let mut position_next = position.wrapping_add(1);
 
         if position_next >= slot.candidates.len() {
             if slot.required {
