@@ -244,11 +244,11 @@ impl PaperdollAsset {
             }
         };
 
-        let mut position_prev = position - 1;
+        let mut position_prev = position.wrapping_sub(1);
 
         if position_prev == usize::MAX {
             if slot.required {
-                position_prev = slot.candidates.len() - 1;
+                position_prev = slot.candidates.len().wrapping_sub(1);
             } else {
                 return self.set_slot(id, slot_id, SetSlotBy::Empty);
             }
