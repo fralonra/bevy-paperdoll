@@ -3,8 +3,11 @@ use std::sync::atomic::{AtomicU32, Ordering};
 use anyhow::{anyhow, bail, Result};
 use bevy::{
     prelude::*,
-    reflect::{TypePath, TypeUuid},
-    render::render_resource::{Extent3d, TextureDimension, TextureFormat},
+    reflect::TypePath,
+    render::{
+        render_asset::RenderAssetUsages,
+        render_resource::{Extent3d, TextureDimension, TextureFormat},
+    },
     utils::HashMap,
 };
 use paperdoll_tar::paperdoll::{Doll, Fragment, Paperdoll, PaperdollFactory, Slot};
@@ -17,8 +20,7 @@ enum SetSlotBy {
 }
 
 /// A structure storing the paperdoll asset and all paperdolls you created.
-#[derive(Asset, TypePath, TypeUuid)]
-#[uuid = "f5c9a7ce-3a4a-11ee-be56-0242ac120002"]
+#[derive(Asset, TypePath)]
 pub struct PaperdollAsset {
     factory: PaperdollFactory,
     id_to_paperdoll: HashMap<PaperdollId, Paperdoll>,
@@ -355,6 +357,7 @@ impl PaperdollAsset {
                 TextureDimension::D2,
                 texture.pixels,
                 TextureFormat::Rgba8UnormSrgb,
+                RenderAssetUsages::default(),
             );
 
             self.id_to_texture.insert(id, image);

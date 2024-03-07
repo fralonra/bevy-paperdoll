@@ -55,7 +55,7 @@ mod in_game {
 fn main() {
     App::new()
         .add_plugins((DefaultPlugins, PaperdollPlugin))
-        .add_state::<GameState>()
+        .init_state::<GameState>()
         .init_resource::<Resources>()
         .add_plugins((LoadingPlugin, InGamePlugin))
         .run();
