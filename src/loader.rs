@@ -1,13 +1,13 @@
 use bevy::{
-    asset::{AssetLoader, AsyncReadExt, LoadContext},
+    asset::{io::Reader, AssetLoader, AsyncReadExt, LoadContext},
     prelude::*,
-    utils::{thiserror, BoxedFuture},
 };
+use thiserror::Error;
 
 use crate::PaperdollAsset;
 
 #[non_exhaustive]
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Error)]
 pub enum PaperdollLoaderError {
     #[error("Could not load paperdoll source: {0}")]
     Io(#[from] std::io::Error),
@@ -26,22 +26,20 @@ impl AssetLoader for PaperdollLoader {
 
     type Error = PaperdollLoaderError;
 
-    fn load<'a>(
+    async fn load<'a>(
         &'a self,
-        reader: &'a mut bevy::asset::io::Reader,
+        reader: &'a mut Reader<'_>,
         _settings: &'a Self::Settings,
-        _load_context: &'a mut LoadContext,
-    ) -> BoxedFuture<'a, Result<Self::Asset, Self::Error>> {
-        Box::pin(async move {
-            let mut bytes = Vec::new();
-            reader.read_to_end(&mut bytes).await?;
+        _load_context: &'a mut LoadContext<'_>,
+    ) -> Result<Self::Asset, Self::Error> {
+        let mut bytes = Vec::new();
+        reader.read_to_end(&mut bytes).await?;
 
-            let factory = paperdoll_tar::read(bytes.as_slice())?;
+        let factory = paperdoll_tar::read(bytes.as_slice())?;
 
-            let paperdoll_asset = PaperdollAsset::new(factory);
+        let paperdoll_asset = PaperdollAsset::new(factory);
 
-            Ok(paperdoll_asset)
-        })
+        Ok(paperdoll_asset)
     }
 
     fn extensions(&self) -> &[&str] {
