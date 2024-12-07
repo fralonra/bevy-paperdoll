@@ -88,9 +88,7 @@ impl PaperdollAsset {
             .map(|slot| {
                 slot.candidates
                     .iter()
-                    .map(|fragment_id| self.factory.get_fragment(*fragment_id))
-                    .filter(|fragment| fragment.is_some())
-                    .map(|fragment| fragment.unwrap())
+                    .filter_map(|fragment_id| self.factory.get_fragment(*fragment_id))
                     .collect::<Vec<&Fragment>>()
             })
             .unwrap_or_default()
@@ -123,9 +121,7 @@ impl PaperdollAsset {
         doll.map(|doll| {
             doll.slots
                 .iter()
-                .map(|slot_id| self.factory.get_slot(*slot_id))
-                .filter(|slot| slot.is_some())
-                .map(|slot| slot.unwrap())
+                .filter_map(|slot_id| self.factory.get_slot(*slot_id))
                 .collect::<Vec<&Slot>>()
         })
         .unwrap_or_default()
