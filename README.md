@@ -72,6 +72,7 @@ See [examples](examples/README.md) for more.
 
 | bevy | bevy-paperdoll |
 | ---- | -------------- |
+| 0.15 | 0.5            |
 | 0.14 | 0.4            |
 | 0.13 | 0.3            |
 | 0.12 | 0.2            |
