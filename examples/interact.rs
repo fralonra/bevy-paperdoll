@@ -19,7 +19,7 @@ struct Resources {
 }
 
 mod in_game {
-    use bevy::prelude::*;
+    use bevy::{ecs::spawn::SpawnWith, prelude::*};
     use bevy_paperdoll::PaperdollAsset;
 
     use super::{GameState, Resources};
@@ -132,74 +132,84 @@ mod in_game {
 
         commands.spawn(Camera2d::default());
 
-        let paperdoll_asset = paperdolls.get_mut(&resources.asset);
-        if paperdoll_asset.is_none() {
+        let Some(paperdoll_asset) = paperdolls.get_mut(&resources.asset) else {
             commands.spawn((Text::new("Failed to load assets"), text_font.clone()));
-
             return;
-        }
-        let paperdoll_asset = paperdoll_asset.unwrap();
+        };
 
         let paperdoll_id = paperdoll_asset.create_paperdoll(0);
 
         resources.paperdoll = paperdoll_id;
 
-        let paperdoll_image = paperdoll_asset.take_texture(paperdoll_id);
-        if paperdoll_image.is_none() {
+        let Some(paperdoll_image) = paperdoll_asset.take_texture(paperdoll_id) else {
             commands.spawn((Text::new("Failed to load textures"), text_font.clone()));
-        }
-        let paperdoll_image = paperdoll_image.unwrap();
+            return;
+        };
 
         let texture_width = paperdoll_image.size().x;
         let texture = images.add(paperdoll_image);
 
-        commands
-            .spawn(Node {
+        let slots = paperdoll_asset.get_slots(paperdoll_id);
+        let slot_items = slots
+            .iter()
+            .map(|slot| {
+                (
+                    slot.id(),
+                    slot.desc.clone(),
+                    paperdoll_asset
+                        .get_slot_fragment(paperdoll_id, slot.id())
+                        .map(|fragment| fragment.desc.as_str())
+                        .unwrap_or("-")
+                        .to_owned(),
+                )
+            })
+            .collect::<Vec<(u32, String, String)>>();
+
+        commands.spawn((
+            Node {
                 width: Val::Percent(100.0),
                 height: Val::Percent(100.0),
                 align_items: AlignItems::Center,
                 justify_content: JustifyContent::Center,
                 ..default()
-            })
-            .with_children(|parent| {
+            },
+            children![
                 // display image
-                parent
-                    .spawn(Node {
+                (
+                    Node {
                         width: Val::Percent(50.0),
                         justify_content: JustifyContent::Center,
                         ..default()
-                    })
-                    .with_children(|parent| {
-                        parent.spawn((
-                            ImageNode {
-                                image: texture,
-                                ..default()
-                            },
-                            Node {
-                                width: Val::Percent(80.0),
-                                max_width: Val::Px(texture_width as f32),
-                                ..default()
-                            },
-                            PaperdollUiImage,
-                        ));
-                    });
-
-                parent
-                    .spawn(Node {
+                    },
+                    children![(
+                        ImageNode {
+                            image: texture,
+                            ..default()
+                        },
+                        Node {
+                            width: Val::Percent(80.0),
+                            max_width: Val::Px(texture_width as f32),
+                            ..default()
+                        },
+                        PaperdollUiImage,
+                    )]
+                ),
+                (
+                    Node {
                         width: Val::Percent(30.0),
                         flex_direction: FlexDirection::Column,
                         align_items: AlignItems::Center,
                         justify_content: JustifyContent::Center,
                         ..default()
-                    })
-                    .with_children(|parent| {
-                        // ui for each slot
-                        for slot in paperdoll_asset.get_slots(paperdoll_id) {
+                    },
+                    // ui for each slot
+                    Children::spawn(SpawnWith(move |parent: &mut ChildSpawner| {
+                        for (id, desc, fragment_desc) in slot_items {
                             // slot description
-                            parent.spawn((Text::new(&slot.desc), text_font.clone()));
+                            parent.spawn((Text::new(desc), text_font.clone()));
 
-                            parent
-                                .spawn(Node {
+                            parent.spawn((
+                                Node {
                                     width: Val::Percent(80.0),
                                     min_width: Val::Px(200.0),
                                     max_width: Val::Px(300.0),
@@ -211,58 +221,48 @@ mod in_game {
                                         ..default()
                                     },
                                     ..default()
-                                })
-                                .with_children(|parent| {
+                                },
+                                children![
                                     // prev button
-                                    parent
-                                        .spawn((
-                                            Button,
-                                            Node {
-                                                align_items: AlignItems::Center,
-                                                justify_content: JustifyContent::Center,
-                                                ..default()
-                                            },
-                                            BackgroundColor(Color::NONE),
-                                            ButtonAction::Prev(slot.id()),
-                                        ))
-                                        .with_children(|parent| {
-                                            parent.spawn((Text::new("<"), text_font.clone()));
-                                        });
-
+                                    (
+                                        Button,
+                                        Node {
+                                            align_items: AlignItems::Center,
+                                            justify_content: JustifyContent::Center,
+                                            ..default()
+                                        },
+                                        BackgroundColor(Color::NONE),
+                                        ButtonAction::Prev(id),
+                                        children![(Text::new("<"), text_font.clone())]
+                                    ),
                                     // fragment description
                                     //
                                     // Displays the description of fragment currently used for this slot.
                                     // If this slot is empty, shows '-' instead.
-                                    parent.spawn((
-                                        Text::new(
-                                            paperdoll_asset
-                                                .get_slot_fragment(paperdoll_id, slot.id())
-                                                .map(|fragment| fragment.desc.as_str())
-                                                .unwrap_or("-"),
-                                        ),
+                                    (
+                                        Text::new(fragment_desc),
                                         text_font.clone(),
-                                        TextForSlotFragment(slot.id()),
-                                    ));
-
+                                        TextForSlotFragment(id),
+                                    ),
                                     // next button
-                                    parent
-                                        .spawn((
-                                            Button,
-                                            Node {
-                                                align_items: AlignItems::Center,
-                                                justify_content: JustifyContent::Center,
-                                                ..default()
-                                            },
-                                            BackgroundColor(Color::NONE),
-                                            ButtonAction::Next(slot.id()),
-                                        ))
-                                        .with_children(|parent| {
-                                            parent.spawn((Text::new(">"), text_font.clone()));
-                                        });
-                                });
+                                    (
+                                        Button,
+                                        Node {
+                                            align_items: AlignItems::Center,
+                                            justify_content: JustifyContent::Center,
+                                            ..default()
+                                        },
+                                        BackgroundColor(Color::NONE),
+                                        ButtonAction::Next(id),
+                                        children![(Text::new(">"), text_font.clone())]
+                                    )
+                                ],
+                            ));
                         }
-                    });
-            });
+                    }))
+                )
+            ],
+        ));
     }
 }
 

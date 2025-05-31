@@ -45,21 +45,20 @@ mod in_game {
 
         let paperdoll_image = paperdoll_asset.take_texture(paperdoll_id).unwrap();
 
-        commands
-            .spawn(Node {
+        commands.spawn((
+            Node {
                 width: Val::Percent(100.0),
                 height: Val::Percent(100.0),
                 flex_direction: FlexDirection::Column,
                 justify_content: JustifyContent::Center,
                 align_items: AlignItems::Center,
                 ..default()
-            })
-            .with_children(|parent| {
-                parent.spawn((ImageNode {
-                    image: images.add(paperdoll_image),
-                    ..default()
-                },));
-            });
+            },
+            children![ImageNode {
+                image: images.add(paperdoll_image),
+                ..default()
+            }],
+        ));
     }
 }
 
