@@ -30,7 +30,7 @@ mod in_game {
         Prev(u32),
     }
 
-    #[derive(Event)]
+    #[derive(Message)]
     struct PaperdollChangedEvent(u32);
 
     #[derive(Component)]
@@ -43,7 +43,7 @@ mod in_game {
 
     impl Plugin for InGamePlugin {
         fn build(&self, app: &mut App) {
-            app.add_event::<PaperdollChangedEvent>()
+            app.add_message::<PaperdollChangedEvent>()
                 .add_systems(OnEnter(GameState::InGame), setup_ui)
                 .add_systems(
                     Update,
@@ -58,7 +58,7 @@ mod in_game {
             (&Interaction, &ButtonAction),
             (Changed<Interaction>, With<Button>),
         >,
-        mut ev_paperdoll: EventWriter<PaperdollChangedEvent>,
+        mut ev_paperdoll: MessageWriter<PaperdollChangedEvent>,
         mut paperdolls: ResMut<Assets<PaperdollAsset>>,
         resources: Res<Resources>,
     ) {
@@ -75,7 +75,7 @@ mod in_game {
                             .slot_use_prev(paperdoll_id, *slot_id)
                             .map(|_| slot_id),
                     } {
-                        ev_paperdoll.send(PaperdollChangedEvent(*slot_id));
+                        ev_paperdoll.write(PaperdollChangedEvent(*slot_id));
                     }
                 }
             }
@@ -86,7 +86,7 @@ mod in_game {
     fn paperdoll_update(
         mut image_query: Query<&mut ImageNode, With<PaperdollUiImage>>,
         mut text_query: Query<(&mut Text, &TextForSlotFragment)>,
-        mut ev_paperdoll: EventReader<PaperdollChangedEvent>,
+        mut ev_paperdoll: MessageReader<PaperdollChangedEvent>,
         mut images: ResMut<Assets<Image>>,
         mut paperdolls: ResMut<Assets<PaperdollAsset>>,
         resources: Res<Resources>,

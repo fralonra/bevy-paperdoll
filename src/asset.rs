@@ -2,13 +2,11 @@ use std::sync::atomic::{AtomicU32, Ordering};
 
 use anyhow::{anyhow, bail, Result};
 use bevy::{
+    asset::RenderAssetUsages,
     platform::collections::HashMap,
     prelude::*,
     reflect::TypePath,
-    render::{
-        render_asset::RenderAssetUsages,
-        render_resource::{Extent3d, TextureDimension, TextureFormat},
-    },
+    render::render_resource::{Extent3d, TextureDimension, TextureFormat},
 };
 use paperdoll_tar::paperdoll::{Doll, Fragment, Paperdoll, PaperdollFactory, Slot};
 
