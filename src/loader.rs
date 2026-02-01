@@ -16,7 +16,7 @@ pub enum PaperdollLoaderError {
 }
 
 /// Bevy asset loader for loading paperdoll asset (.ppd).
-#[derive(Default)]
+#[derive(Default, TypePath)]
 pub struct PaperdollLoader;
 
 impl AssetLoader for PaperdollLoader {

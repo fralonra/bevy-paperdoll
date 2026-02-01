@@ -14,7 +14,7 @@ exclude = [".gitignore", ".github/*", "assets/*", "doc/*", "examples/*"]
 
 [dependencies]
 anyhow = "1.0"
-bevy = { version = "0.17", default-features = false, features = [
+bevy = { version = "0.18", default-features = false, features = [
   "bevy_asset",
   "bevy_render",
 ] }
@@ -22,7 +22,7 @@ paperdoll-tar = "0.1"
 thiserror = "1.0"
 
 [dev-dependencies]
-bevy = { version = "0.17", default-features = false, features = [
+bevy = { version = "0.18", default-features = false, features = [
   "bevy_state",
   "bevy_ui",
   "bevy_ui_render",
