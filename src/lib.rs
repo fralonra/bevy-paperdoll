@@ -47,7 +47,7 @@
 //! #   let handle = resources.0.clone();
 //! #
 //!     // Access the paperdoll asset using the handle stored previously.
-//!     let paperdoll_asset = paperdolls.get_mut(&handle).unwrap();
+//!     let mut paperdoll_asset = paperdolls.get_mut(&handle).unwrap();
 //!
 //!     // Create a paperdoll based on doll 0.
 //!     // The returned id will be used to refer to this paperdoll in the following process.
