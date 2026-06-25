@@ -39,7 +39,7 @@ mod in_game {
     ) {
         commands.spawn(Camera2d::default());
 
-        let paperdoll_asset = paperdolls.get_mut(&resources.asset).unwrap();
+        let mut paperdoll_asset = paperdolls.get_mut(&resources.asset).unwrap();
 
         let paperdoll_id = paperdoll_asset.create_paperdoll(0);
 

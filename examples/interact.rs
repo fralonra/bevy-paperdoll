@@ -64,7 +64,7 @@ mod in_game {
     ) {
         for (interaction, button_action) in &interaction_query {
             if *interaction == Interaction::Pressed {
-                if let Some(paperdoll_asset) = paperdolls.get_mut(&resources.asset) {
+                if let Some(mut paperdoll_asset) = paperdolls.get_mut(&resources.asset) {
                     let paperdoll_id = resources.paperdoll;
 
                     if let Ok(slot_id) = match button_action {
@@ -91,7 +91,7 @@ mod in_game {
         mut paperdolls: ResMut<Assets<PaperdollAsset>>,
         resources: Res<Resources>,
     ) {
-        if let Some(paperdoll_asset) = paperdolls.get_mut(&resources.asset) {
+        if let Some(mut paperdoll_asset) = paperdolls.get_mut(&resources.asset) {
             for ev in ev_paperdoll.read() {
                 if let Some(paperdoll_image) = paperdoll_asset.take_texture(resources.paperdoll) {
                     let texture = images.add(paperdoll_image);
@@ -126,13 +126,13 @@ mod in_game {
         mut resources: ResMut<Resources>,
     ) {
         let text_font = TextFont {
-            font_size: 24.0,
+            font_size: FontSize::Px(24.0),
             ..default()
         };
 
         commands.spawn(Camera2d::default());
 
-        let Some(paperdoll_asset) = paperdolls.get_mut(&resources.asset) else {
+        let Some(mut paperdoll_asset) = paperdolls.get_mut(&resources.asset) else {
             commands.spawn((Text::new("Failed to load assets"), text_font.clone()));
             return;
         };
