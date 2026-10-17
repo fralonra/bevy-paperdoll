@@ -19,7 +19,7 @@ struct Resources {
 }
 
 mod in_game {
-    use bevy::{ecs::spawn::SpawnWith, prelude::*};
+    use bevy::{ecs::spawn::SpawnWith, prelude::*, ui::Pressed, ui_widgets::Button};
     use bevy_paperdoll::PaperdollAsset;
 
     use super::{GameState, Resources};
@@ -54,16 +54,13 @@ mod in_game {
 
     // Handles user interactions.
     fn button_action(
-        interaction_query: Query<
-            (&Interaction, &ButtonAction),
-            (Changed<Interaction>, With<Button>),
-        >,
+        interaction_query: Query<(Has<Pressed>, &ButtonAction), (Changed<Pressed>, With<Button>)>,
         mut ev_paperdoll: MessageWriter<PaperdollChangedEvent>,
         mut paperdolls: ResMut<Assets<PaperdollAsset>>,
         resources: Res<Resources>,
     ) {
-        for (interaction, button_action) in &interaction_query {
-            if *interaction == Interaction::Pressed {
+        for (pressed, button_action) in &interaction_query {
+            if pressed {
                 if let Some(mut paperdoll_asset) = paperdolls.get_mut(&resources.asset) {
                     let paperdoll_id = resources.paperdoll;
 
